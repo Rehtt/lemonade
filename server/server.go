@@ -32,6 +32,7 @@ func Serve(c *lemon.CLI, logger log.Logger) error {
 	if err != nil {
 		return err
 	}
+	logger.Info("Server started on " + l.Addr().String())
 
 	for {
 		conn, err := l.Accept()
