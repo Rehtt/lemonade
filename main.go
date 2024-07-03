@@ -6,9 +6,9 @@ import (
 
 	log "github.com/inconshreveable/log15"
 
-	"github.com/lemonade-command/lemonade/client"
-	"github.com/lemonade-command/lemonade/lemon"
-	"github.com/lemonade-command/lemonade/server"
+	"github.com/Rehtt/lemonade/client"
+	"github.com/Rehtt/lemonade/lemon"
+	"github.com/Rehtt/lemonade/server"
 )
 
 var logLevelMap = map[int]log.Lvl{
@@ -20,7 +20,6 @@ var logLevelMap = map[int]log.Lvl{
 }
 
 func main() {
-
 	cli := &lemon.CLI{
 		In:  os.Stdin,
 		Out: os.Stdout,
@@ -63,7 +62,8 @@ func Do(c *lemon.CLI, args []string) int {
 		c.Out.Write([]byte(text))
 	case lemon.SERVER:
 		logger.Debug("Starting Server")
-		err = server.Serve(c, logger)
+		server.Serve(c, logger)
+		err = fmt.Errorf("Server stopped")
 	default:
 		panic("Unreachable code")
 	}

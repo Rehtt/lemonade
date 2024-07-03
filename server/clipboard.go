@@ -1,8 +1,8 @@
 package server
 
 import (
+	"github.com/Rehtt/lemonade/lemon"
 	"github.com/atotto/clipboard"
-	"github.com/lemonade-command/lemonade/lemon"
 )
 
 type Clipboard struct{}

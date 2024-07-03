@@ -7,7 +7,7 @@ import (
 
 	log "github.com/inconshreveable/log15"
 
-	"github.com/lemonade-command/lemonade/lemon"
+	"github.com/Rehtt/lemonade/lemon"
 	"github.com/pocke/go-iprange"
 )
 
@@ -15,7 +15,7 @@ var connCh = make(chan net.Conn, 1)
 
 var LineEndingOpt string
 
-func Serve(c *lemon.CLI, logger log.Logger) error {
+func serve(c *lemon.CLI, logger log.Logger) error {
 	port := c.Port
 	allowIP := c.Allow
 	LineEndingOpt = c.LineEnding

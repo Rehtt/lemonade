@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
-var Version string
-var Usage = fmt.Sprintf(`Usage: lemonade [options]... SUB_COMMAND [arg]
+var (
+	Version string
+	Gui     string
+	Usage   = fmt.Sprintf(`Usage: lemonade [options]... SUB_COMMAND [arg]
 Sub Commands:
   open [URL]                  Open URL by browser
   copy [text]                 Copy text.
@@ -28,6 +30,7 @@ Options:
 
 Version:
   %s`, Version)
+)
 
 func ConvertLineEnding(text, option string) string {
 	switch option {

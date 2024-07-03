@@ -11,9 +11,9 @@ import (
 
 	log "github.com/inconshreveable/log15"
 
-	"github.com/lemonade-command/lemonade/lemon"
-	"github.com/lemonade-command/lemonade/param"
-	"github.com/lemonade-command/lemonade/server"
+	"github.com/Rehtt/lemonade/lemon"
+	"github.com/Rehtt/lemonade/param"
+	"github.com/Rehtt/lemonade/server"
 )
 
 type client struct {
