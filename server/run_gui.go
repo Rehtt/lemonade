@@ -1,4 +1,4 @@
-//go:build windows
+//go:build gui
 
 package server
 
@@ -22,7 +22,10 @@ func Serve(c *lemon.CLI, logger log.Logger) {
 				<-quit.ClickedCh
 				systray.Quit()
 			}()
-			go serve(c, logger)
+			go func() {
+				serve(c, logger)
+				systray.Quit()
+			}()
 		}, func() {
 			os.Exit(0)
 		})
