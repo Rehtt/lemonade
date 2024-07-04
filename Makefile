@@ -34,4 +34,4 @@ icon:
 	rm lemon/icon.hex
 
 build_windows_gui:
-	GOOS=windows go build -ldflags "-s -w -X github.com/Rehtt/lemonade/lemon.Version=$(VERSION) -X github.com/Rehtt/lemonade/lemon.Gui=gui" -tags gui
+	GOOS=windows go build -ldflags "-s -w -X github.com/Rehtt/lemonade/lemon.Version=$(VERSION) -H windowsgui" -tags gui

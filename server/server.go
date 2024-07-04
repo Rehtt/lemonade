@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"net/rpc"
@@ -13,7 +14,10 @@ import (
 
 var connCh = make(chan net.Conn, 1)
 
-var LineEndingOpt string
+var (
+	LineEndingOpt string
+	listen        *net.TCPListener
+)
 
 func serve(c *lemon.CLI, logger log.Logger) error {
 	port := c.Port
@@ -28,15 +32,18 @@ func serve(c *lemon.CLI, logger log.Logger) error {
 	if err != nil {
 		return err
 	}
-	l, err := net.ListenTCP("tcp", addr)
+	listen, err = net.ListenTCP("tcp", addr)
 	if err != nil {
 		return err
 	}
-	logger.Info("Server started on " + l.Addr().String())
+	logger.Info("Server started on " + listen.Addr().String())
 
-	for {
-		conn, err := l.Accept()
+	for listen != nil {
+		conn, err := listen.Accept()
 		if err != nil {
+			if errors.Is(err, net.ErrClosed) {
+				continue
+			}
 			logger.Error(err.Error())
 			continue
 		}
@@ -47,6 +54,19 @@ func serve(c *lemon.CLI, logger log.Logger) error {
 		connCh <- conn
 		rpc.ServeConn(conn)
 	}
+	return nil
+}
+
+func stopServe(logger log.Logger) error {
+	if listen != nil {
+		err := listen.Close()
+		if err != nil {
+			return err
+		}
+		listen = nil
+		logger.Info("Server stopped")
+	}
+	return nil
 }
 
 // ServeLocal is for fall back when lemonade client can't connect to server.

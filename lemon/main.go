@@ -8,7 +8,6 @@ import (
 
 var (
 	Version string
-	Gui     string
 	Usage   = fmt.Sprintf(`Usage: lemonade [options]... SUB_COMMAND [arg]
 Sub Commands:
   open [URL]                  Open URL by browser

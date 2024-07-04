@@ -12,24 +12,40 @@ import (
 )
 
 func Serve(c *lemon.CLI, logger log.Logger) {
-	if lemon.Gui == "gui" {
-		systray.Run(func() {
-			systray.SetTitle("lemonade-server")
-			systray.SetTooltip("Server started on :" + strconv.Itoa(c.Port))
-			systray.SetIcon(lemon.Icon)
-			quit := systray.AddMenuItem("Quit", "Quit")
-			go func() {
-				<-quit.ClickedCh
-				systray.Quit()
-			}()
-			go func() {
-				serve(c, logger)
-				systray.Quit()
-			}()
-		}, func() {
-			os.Exit(0)
-		})
-	} else {
-		serve(c, logger)
-	}
+	systray.Run(func() {
+		systray.SetTitle("lemonade-server")
+		systray.SetTooltip("Server started on :" + strconv.Itoa(c.Port))
+		systray.SetIcon(lemon.Icon)
+		restart := systray.AddMenuItem("Restart", "Restart")
+		quit := systray.AddMenuItem("Quit", "Quit")
+		startServe := make(chan struct{}, 1)
+		startServe <- struct{}{}
+
+		go func() {
+			for {
+				select {
+				case <-quit.ClickedCh:
+					systray.Quit()
+				case <-restart.ClickedCh:
+					err := stopServe(logger)
+					if err != nil {
+						systray.SetTooltip(err.Error())
+						continue
+					}
+					startServe <- struct{}{}
+				}
+			}
+		}()
+		go func() {
+			for {
+				<-startServe
+				err := serve(c, logger)
+				if err != nil {
+					systray.SetTooltip(err.Error())
+				}
+			}
+		}()
+	}, func() {
+		os.Exit(0)
+	})
 }
